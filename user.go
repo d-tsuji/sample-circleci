@@ -16,7 +16,7 @@ type User struct {
 
 func FetchUserByID(ctx context.Context, userID string) (*User, error) {
 	q := &dynamodb.GetItemInput{
-		TableName: aws.String("local_user"),
+		TableName: aws.String(userTable),
 		Key: map[string]*dynamodb.AttributeValue{
 			"user_id": {
 				S: aws.String(userID),

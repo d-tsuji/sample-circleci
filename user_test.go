@@ -10,7 +10,7 @@ import (
 
 func setupDB(t *testing.T) {
 	cmds := []string{
-		`aws dynamodb --profile local --endpoint-url http://localhost:8000 create-table --cli-input-json file://./testdata/local_user.json`,
+		`aws dynamodb --endpoint-url http://localhost:8000 create-table --cli-input-json file://./testdata/local_user.json`,
 		`aws dynamodb put-item --endpoint-url http://localhost:8000 --table-name local_user --item file://./testdata/input_user.json`,
 	}
 	for _, cmd := range cmds {
@@ -23,7 +23,7 @@ func setupDB(t *testing.T) {
 
 func teardownDB(t *testing.T) {
 	cmds := []string{
-		`aws dynamodb --profile local --endpoint-url http://localhost:8000 delete-table --table local_user`,
+		`aws dynamodb --endpoint-url http://localhost:8000 delete-table --table local_user`,
 	}
 	for _, cmd := range cmds {
 		args := strings.Split(cmd, " ")
