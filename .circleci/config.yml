@@ -12,7 +12,6 @@ jobs:
     # Environment values for all container
     environment:
       - GO111MODULE: "on"
-        REVIEWDOG_GITHUB_API_TOKEN:
     steps:
       - checkout
       - run:
@@ -23,7 +22,7 @@ jobs:
             sudo ./aws/install
       - run:
           name: Install GolangCI-Lint
-          command: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.27.0
+          command: go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.27.0
       - run:
           command: |
             go get -u golang.org/x/lint/golint
@@ -58,11 +57,9 @@ jobs:
           name: Execute reviewdog
           command: |
             if [ -n "$CI_PULL_REQUEST" ]; then
-              golint $(go list ./...) | reviewdog -name=golint -reporter='github-pr-review'
-              golangci-lint run --out-format checkstyle | reviewdog -name=golangci-lint -f=checkstyle -reporter='github-pr-review'
+              golint $(go list ./...) | eval reviewdog -f=golint -reporter='github-pr-review'
+              golangci-lint run --out-format checkstyle --issues-exit-code 0 | reviewdog -name=golangci-lint -f=checkstyle -reporter='github-pr-review'
             fi
-          environment:
-              REVIEWDOG_GITHUB_API_TOKEN: $REVIEWDOG_GITHUB_API_TOKEN
 
 workflows:
   version: 2
