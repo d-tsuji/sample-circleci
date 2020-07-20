@@ -10,8 +10,9 @@ deps:
 	go mod tidy
 
 devel-deps: deps
-	GO111MODULE=off go get -u \
-	  golang.org/x/lint/golint
+	go get -u \
+	  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.27.0 \
+	  github.com/reviewdog/reviewdog/cmd/reviewdog
 
 build:
 	go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN)
